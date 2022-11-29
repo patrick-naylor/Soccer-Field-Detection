@@ -4,6 +4,7 @@ import cv2
 import glob
 import time
 import os
+import scipy
 save_path = 'Images/Masked/'
 
 
@@ -33,7 +34,15 @@ def click_event(event, x, y, flags, params):
  
     # checking for right mouse clicks    
 
-    
+def flood_fill_hull(image, points):    
+    #points = np.transpose(np.where(image))
+    hull = scipy.spatial.ConvexHull(points)
+    deln = scipy.spatial.Delaunay(points[hull.vertices]) 
+    idx = np.stack(np.indices(image.shape), axis = -1)
+    out_idx = np.nonzero(deln.find_simplex(idx) + 1)
+    out_img = np.zeros(image.shape)
+    out_img[out_idx] = 1
+    return out_img, hull   
 
 if __name__ == '__main__':
     bool = True
@@ -58,6 +67,8 @@ if __name__ == '__main__':
                 bool = False
             elif (k == ord('s')) and (len(clicks)  == 4):
                 #print('save here')
+                mask = flood_fill_hull(mask_arr, np.array(clicks))
+                np.savetxt(f'{file_label}.csv', mask, delimiter=',')
                 os.rename(path, f'{save_path}{file_label}.jpg')
                 break
             elif (k == ord('l')):
