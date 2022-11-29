@@ -12,7 +12,7 @@ def click_event(event, x, y, flags, params):
     # checking for left mouse clicks
     if event == cv2.EVENT_LBUTTONDOWN:
         
-        if len(clicks) < 4:
+        if not shape_done:
             clicks.append([x,y])
             #print(clicks)
         # displaying the coordinates
@@ -27,9 +27,6 @@ def click_event(event, x, y, flags, params):
                     1, (255, 0, 0), 2)
         cv2.imshow('image', img)
 
-    if len(clicks) == 4:
-        cv2.fillPoly(img, pts=[np.array(clicks)], color=(255, 255, 0))
-        cv2.imshow('image', img)
  
     # checking for right mouse clicks    
 
@@ -46,6 +43,7 @@ def flood_fill_hull(image, points):
 if __name__ == '__main__':
     bool = True
     for i in range(1000000):
+        shape_done = False
         print(i)
         clicks = []
         raw_paths = glob.glob('/Users/patricknaylor/Desktop/Field_Detection/Images/Raw/*')
@@ -67,7 +65,7 @@ if __name__ == '__main__':
             #print(k)
             if k == 27:
                 bool = False
-            elif (k == ord('s')) and (len(clicks)  == 4):
+            elif (k == ord('s')) and (shape_done):
                 #print('save here')
                 mask, _ = flood_fill_hull(mask_arr, np.array(clicks))
                 np.savetxt(f'{save_path}{file_label}.csv', mask, delimiter=',')
@@ -77,7 +75,10 @@ if __name__ == '__main__':
                 #print('remove picture')
                 os.remove(path)
                 break
-
+            elif (len(clicks) > 2) and (k == ord('a')):
+                shape_done = True
+                cv2.fillPoly(img, pts=[np.array(clicks)], color=(255, 255, 0))
+                cv2.imshow('image', img)
             elif (k == 127):
                 clicks = []
                 img = cv2.imread(raw_paths[0])
