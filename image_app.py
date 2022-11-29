@@ -5,8 +5,7 @@ import glob
 import time
 import os
 import scipy
-save_path = 'Images/Masked/'
-
+save_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
 
 
 def click_event(event, x, y, flags, params):
@@ -49,13 +48,14 @@ if __name__ == '__main__':
     for i in range(1000000):
         print(i)
         clicks = []
-        raw_paths = glob.glob('Images/Raw/*')
+        raw_paths = glob.glob('/Users/patricknaylor/Desktop/Field_Detection/Images/Raw/*')
         path = raw_paths[0]
-        file_label = path[11:-4]
+        file_label = path[56:-4]
+        print(file_label)
         #print(path[10:-3])
         img = cv2.imread(path)
         h, w, c = img.shape
-        mask_arr = np.zeros((h, w))
+        mask_arr = np.zeros((w, h))
         
         cv2.putText(img, 'Place four corners', (w//2, h//2),cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 2)
         cv2.imshow('image', img)
@@ -67,8 +67,8 @@ if __name__ == '__main__':
                 bool = False
             elif (k == ord('s')) and (len(clicks)  == 4):
                 #print('save here')
-                mask = flood_fill_hull(mask_arr, np.array(clicks))
-                np.savetxt(f'{file_label}.csv', mask, delimiter=',')
+                mask, _ = flood_fill_hull(mask_arr, np.array(clicks))
+                np.savetxt(f'{save_path}{file_label}.csv', mask, delimiter=',')
                 os.rename(path, f'{save_path}{file_label}.jpg')
                 break
             elif (k == ord('l')):
