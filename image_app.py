@@ -1,12 +1,14 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import cv2
 import glob
-import time
 import os
 import scipy
 save_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
-
+#This code allows users to select the field from an image to be saved in a 2d mask for training
+#On load an image is shown if the image is not a wide shot of a field the user can press 'l' to delete image and load a new image
+#If the image is ok the user can select the corners of the field (any amout over 2) and his s to submit the drawing
+#If the user makes a mistake they can hit delete to undo all clicks and start again
+#The user can hit escape to exit program
 
 def click_event(event, x, y, flags, params):
     # checking for left mouse clicks
@@ -14,10 +16,7 @@ def click_event(event, x, y, flags, params):
         
         if not shape_done:
             clicks.append([x,y])
-            #print(clicks)
-        # displaying the coordinates
-        # on the Shell
-        #print(x, ' ', y)
+        # Add click location to list for shape defining
  
         # displaying the coordinates
         # on the image window
@@ -31,7 +30,7 @@ def click_event(event, x, y, flags, params):
     # checking for right mouse clicks    
 
 def flood_fill_hull(image, points):    
-    #points = np.transpose(np.where(image))
+    #Create mask with users selection using a convex hull of their selected points
     hull = scipy.spatial.ConvexHull(points)
     deln = scipy.spatial.Delaunay(points[hull.vertices]) 
     idx = np.stack(np.indices(image.shape), axis = -1)
@@ -42,7 +41,9 @@ def flood_fill_hull(image, points):
 
 if __name__ == '__main__':
     bool = True
+    #Loop until user manually closes window
     for i in range(1000000):
+        #Load image
         shape_done = False
         print(i)
         clicks = []
@@ -53,32 +54,38 @@ if __name__ == '__main__':
         #print(path[10:-3])
         img = cv2.imread(path)
         WHITE = (255, 255, 255)
-        img = cv2.copyMakeBorder(img, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=WHITE)
+        #Add white padding to image to make selection easier for user
+        img = cv2.copyMakeBorder(img, 25, 25, 25, 25, cv2.BORDER_CONSTANT, value=WHITE)
         h, w, c = img.shape
+        #Create array with shape of image frame
         mask_arr = np.zeros((w, h))
         
         cv2.imshow('image', img)
+        #On click run click_event
         cv2.setMouseCallback('image', click_event)
         while bool:
             k = cv2.waitKey(0)
-            #print(k)
+            #on 'escape' close both loops and exit program
             if k == 27:
                 bool = False
             elif (k == ord('s')) and (shape_done):
-                #print('save here')
+                #when user selects s and the shape is complete create and save mask and move image file to masked folder
                 mask, _ = flood_fill_hull(mask_arr, np.array(clicks))
                 np.savetxt(f'{save_path}{file_label}.csv', mask, delimiter=',')
                 os.rename(path, f'{save_path}{file_label}.jpg')
+                #Exit while loop
                 break
             elif (k == ord('l')):
-                #print('remove picture')
+                #When user selects 'l' delete and load new image
                 os.remove(path)
                 break
             elif (len(clicks) > 2) and (k == ord('a')):
+                #When user selects 'a' the shape is filled in on the image and the user can select s to save
                 shape_done = True
                 cv2.fillPoly(img, pts=[np.array(clicks)], color=(255, 255, 0))
                 cv2.imshow('image', img)
             elif (k == 127):
+                #User selects 'del' to undo clicks
                 clicks = []
                 img = cv2.imread(raw_paths[0])
                 cv2.imshow('image', img)
