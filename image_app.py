@@ -54,6 +54,8 @@ if __name__ == '__main__':
         print(file_label)
         #print(path[10:-3])
         img = cv2.imread(path)
+        WHITE = (255, 255, 255)
+        img = cv2.copyMakeBorder(img, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=WHITE)
         h, w, c = img.shape
         mask_arr = np.zeros((w, h))
         
