@@ -57,7 +57,6 @@ if __name__ == '__main__':
         h, w, c = img.shape
         mask_arr = np.zeros((w, h))
         
-        cv2.putText(img, 'Place four corners', (w//2, h//2),cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 2)
         cv2.imshow('image', img)
         cv2.setMouseCallback('image', click_event)
         while bool:
