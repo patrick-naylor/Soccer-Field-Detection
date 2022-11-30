@@ -57,6 +57,11 @@ if __name__ == '__main__':
         #Add white padding to image to make selection easier for user
         img = cv2.copyMakeBorder(img, 25, 25, 25, 25, cv2.BORDER_CONSTANT, value=WHITE)
         h, w, c = img.shape
+        while (h != 770) or (w != 1330):
+            os.remove(path)
+            img = cv2.imread(path)
+            img = cv2.copyMakeBorder(img, 25, 25, 25, 25, cv2.BORDER_CONSTANT, value=WHITE)
+            h, w, c = img.shape
         #Create array with shape of image frame
         mask_arr = np.zeros((w, h))
         
