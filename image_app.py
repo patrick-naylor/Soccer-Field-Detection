@@ -5,7 +5,7 @@ import os
 import scipy
 save_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
 #This code allows users to select the field from an image to be saved in a 2d mask for training
-#On load an image is shown if the image is not a wide shot of a field the user can press 'l' to delete image and load a new image
+#On load an image is shown if the image is not a wide shot of a field the user can press 'r' to delete image and load a new image
 #If the image is ok the user can select the corners of the field (any amout over 2) and his s to submit the drawing
 #If the user makes a mistake they can hit delete to undo all clicks and start again
 #The user can hit escape to exit program
@@ -80,8 +80,8 @@ if __name__ == '__main__':
                 os.rename(path, f'{save_path}{file_label}.jpg')
                 #Exit while loop
                 break
-            elif (k == ord('l')):
-                #When user selects 'l' delete and load new image
+            elif (k == ord('r')):
+                #When user selects 'r' delete and load new image
                 os.remove(path)
                 break
             elif (len(clicks) > 2) and (k == ord('a')):
