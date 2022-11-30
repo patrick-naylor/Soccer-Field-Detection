@@ -46,13 +46,13 @@ if __name__ == '__main__':
     for i in range(1000000):
         #Load image
         shape_done = False
-        print(i)
+        #print(i)
         clicks = []
         raw_paths = glob.glob('/Users/patricknaylor/Desktop/Field_Detection/Images/Raw/*')
         path = raw_paths[0]
         file_label = path[56:-4]
-        print(file_label)
-        #print(path[10:-3])
+        #print(file_label)
+        ##print(path[10:-3])
         img = cv2.imread(path)
         WHITE = (255, 255, 255)
         #Add white padding to image to make selection easier for user
@@ -80,6 +80,7 @@ if __name__ == '__main__':
             elif (k == ord('s')) and (shape_done):
                 #when user selects s and the shape is complete create and save mask and move image file to masked folder
                 mask, _ = flood_fill_hull(mask_arr, np.array(clicks))
+                print(path, file_label)
                 np.savetxt(f'{save_path}{file_label}.csv', mask, delimiter=',')
                 os.rename(path, f'{save_path}{file_label}.jpg')
                 #Exit while loop
