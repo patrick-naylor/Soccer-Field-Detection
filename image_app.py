@@ -9,6 +9,7 @@ save_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
 #If the image is ok the user can select the corners of the field (any amout over 2) and his s to submit the drawing
 #If the user makes a mistake they can hit delete to undo all clicks and start again
 #The user can hit escape to exit program
+#Arrays are saved transposed and need to be transposed again
 
 def click_event(event, x, y, flags, params):
     # checking for left mouse clicks
