@@ -96,6 +96,7 @@ if __name__ == '__main__':
                 cv2.imshow('image', img)
             elif (k == 127):
                 #User selects 'del' to undo clicks
+                shape_done = False
                 clicks = []
                 img = cv2.imread(raw_paths[0])
                 img = cv2.copyMakeBorder(img, 25, 25, 25, 25, cv2.BORDER_CONSTANT, value=WHITE)
