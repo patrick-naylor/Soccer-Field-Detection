@@ -60,6 +60,9 @@ if __name__ == '__main__':
         h, w, c = img.shape
         while (h != 770) or (w != 1330):
             os.remove(path)
+            raw_paths = glob.glob('/Users/patricknaylor/Desktop/Field_Detection/Images/Raw/*')
+            path = raw_paths[0]
+            file_label = path[56:-4]
             img = cv2.imread(path)
             img = cv2.copyMakeBorder(img, 25, 25, 25, 25, cv2.BORDER_CONSTANT, value=WHITE)
             h, w, c = img.shape
