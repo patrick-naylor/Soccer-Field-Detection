@@ -88,6 +88,7 @@ if __name__ == '__main__':
                 #User selects 'del' to undo clicks
                 clicks = []
                 img = cv2.imread(raw_paths[0])
+                img = cv2.copyMakeBorder(img, 25, 25, 25, 25, cv2.BORDER_CONSTANT, value=WHITE)
                 cv2.imshow('image', img)
         if not bool:
             break
