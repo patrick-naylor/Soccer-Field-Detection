@@ -4,4 +4,6 @@ import os
 files = glob.glob('/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/*.csv')
 for file in files:
     arr = np.loadtxt(file, deliiter=',', dtype='int8')
-    name = file[:-4]
+    name = file[:-4]+'.npy'
+    np.save(name, arr)
+    os.remove(file)
