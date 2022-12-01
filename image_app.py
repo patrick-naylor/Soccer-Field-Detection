@@ -43,7 +43,7 @@ def flood_fill_hull(image, points):
 if __name__ == '__main__':
     bool = True
     #Loop until user manually closes window
-    for i in range(1000000):
+    while True:
         #Load image
         shape_done = False
         #print(i)
