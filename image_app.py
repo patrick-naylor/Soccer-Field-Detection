@@ -81,7 +81,7 @@ if __name__ == '__main__':
                 #when user selects s and the shape is complete create and save mask and move image file to masked folder
                 mask, _ = flood_fill_hull(mask_arr, np.array(clicks))
                 print(path, file_label)
-                np.savetxt(f'{save_path}{file_label}.csv', mask, delimiter=',')
+                np.save(f'{save_path}{file_label}.npy', mask.astype('int8'))
                 os.rename(path, f'{save_path}{file_label}.jpg')
                 #Exit while loop
                 break
