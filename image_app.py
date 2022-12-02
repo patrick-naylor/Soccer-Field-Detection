@@ -14,11 +14,10 @@ save_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
 def click_event(event, x, y, flags, params):
     # checking for left mouse clicks
     if event == cv2.EVENT_LBUTTONDOWN:
-        
         if not shape_done:
+        # Add click location to list for shape defining    
             clicks.append([x,y])
-        # Add click location to list for shape defining
- 
+        
         # displaying the coordinates
         # on the image window
             font = cv2.FONT_HERSHEY_SIMPLEX
