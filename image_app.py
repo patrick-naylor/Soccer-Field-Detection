@@ -52,8 +52,15 @@ if __name__ == "__main__":
             "/Users/patricknaylor/Desktop/Field_Detection/Images/Raw/*"
         )
         raw_count = len(raw_paths)
-        masked_count = len(glob.glob("/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/*"))//2
-        print(f'Images Remaining: {raw_count} \nImages Processed: {masked_count}')
+        masked_count = (
+            len(
+                glob.glob(
+                    "/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/*"
+                )
+            )
+            // 2
+        )
+        print(f"Images Remaining: {raw_count} \nImages Processed: {masked_count}")
         path = raw_paths[0]
         file_label = path[56:-4]
         # print(file_label)
@@ -89,7 +96,7 @@ if __name__ == "__main__":
             elif (k == ord("s")) and (shape_done):
                 # when user selects s and the shape is complete create and save mask and move image file to masked folder
                 mask, _ = flood_fill_hull(mask_arr, np.array(clicks))
-                #print(path, file_label)
+                # print(path, file_label)
                 np.save(f"{save_path}{file_label}.npy", mask.astype("int8"))
                 os.rename(path, f"{save_path}{file_label}.jpg")
                 # Exit while loop
