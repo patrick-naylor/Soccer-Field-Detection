@@ -53,7 +53,7 @@ if __name__ == "__main__":
         )
         raw_count = len(raw_paths)
         masked_count = len(glob.glob("/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/*"))//2
-        print(f'Images Remaining: {raw_count} \n Images Processed: {masked_count}')
+        print(f'Images Remaining: {raw_count} \nImages Processed: {masked_count}')
         path = raw_paths[0]
         file_label = path[56:-4]
         # print(file_label)
