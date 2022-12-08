@@ -103,7 +103,7 @@ if __name__ == "__main__":
                 break
             elif k == ord("r"):
                 # When user selects 'r' delete and load new image
-                os.remove(path)
+                os.rrremove(path)
                 break
             elif (len(clicks) > 2) and (k == ord("a")):
                 # When user selects 'a' the shape is filled in on the image and the user can select s to save
