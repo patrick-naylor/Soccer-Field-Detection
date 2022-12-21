@@ -3,13 +3,9 @@ import cv2
 import torchvision.transforms as transforms
 import torch.nn.functional as F
 import torch.nn as nn
-
-#TESTING
-image_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
+import glob
 
 
-
-#TESTINGJ
 model_path = 'model_latest.pth'
 class Model(nn.Module):
     def __init__(self):
@@ -44,3 +40,10 @@ def field_mask(image):
     mask = mask.reshapel(36, 64)
     print(mask.size(), image_shrunk.size())
 
+#TESTING
+image_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
+images = list(glob.glob(image_path + '*.jpg'))
+test_image_path = images[0]
+test_image = cv2.cvtColor(cv2.imread(test_image_path), cv2.COLOR_BGR2RGB)
+field_mask(test_image)
+#TESTINGJ
