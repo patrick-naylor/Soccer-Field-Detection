@@ -7,6 +7,7 @@ import glob
 from torch.utils.data import DataLoader, Dataset
 import numpy as np
 from scipy import interpolate
+import matplotlib.pyplot as plt
 
 
 model_path = '/Users/patricknaylor/Desktop/Field_Detection/data/Models/model_latest.pth'
@@ -66,21 +67,25 @@ def field_mask(image):
         x2 = np.linspace(0, 1, 720)
         y2 = np.linspace(0, 1, 1280)
         mask_expand = f(y2, x2)
-        print(mask_expand.shape)
+        mask_expand[mask_expand>.5] = 1
+        mask_expand[mask_expand<=.5] = 0
         print(mask_expand)
         masked_image = np.zeros((720, 1280, 3))
         for i in range(3):
+            print(mask_expand.shape, image[:, :, i].shape)
             masked_image[:, :, i] = mask_expand * image[:, :, i]
+            print(masked_image[:,:,i])
 
         return masked_image
 
 #TESTING
 image_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
 images = list(glob.glob(image_path + '*.jpg'))
-test_image_path = images[0]
+test_image_path = images[15]
 test_image = cv2.cvtColor(cv2.imread(test_image_path), cv2.COLOR_BGR2RGB)
 masked_image = field_mask(test_image)
-#cv2.imshow('image', masked_image)
-#cv2.waitKey(0)
-#cv2.destroyAllWindows
+print(masked_image)
+plt.imshow(masked_image[:,:,:].astype('int'))
+plt.colorbar()
+plt.show()
 #TESTINGJ
