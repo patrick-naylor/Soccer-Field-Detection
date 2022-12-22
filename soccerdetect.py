@@ -73,17 +73,3 @@ def field_mask(image):
             masked_image[:, :, i] = mask_expand * image[:, :, i]
 
         return masked_image
-
-#TESTING
-image_path = '/Users/patricknaylor/Desktop/Field_Detection/Images/Masked/'
-images = list(glob.glob(image_path + '*.jpg'))
-test_image_path = images[200]
-test_image = cv2.cvtColor(cv2.imread(test_image_path), cv2.COLOR_BGR2RGB)
-masked_image = field_mask(test_image)
-plt.subplot(2,1,1)
-plt.imshow(masked_image[:,:,:].astype('int'))
-
-plt.subplot(2,1,2)
-plt.imshow(test_image)
-plt.show()
-#TESTINGJ
