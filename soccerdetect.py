@@ -3,14 +3,11 @@ import cv2
 import torchvision.transforms as transforms
 import torch.nn.functional as F
 import torch.nn as nn
-import glob
 from torch.utils.data import DataLoader, Dataset
 import numpy as np
 from scipy import interpolate
-import matplotlib.pyplot as plt
 
 
-model_path = '/Users/patricknaylor/Desktop/Field_Detection/data/Models/model_latest.pth'
 class imageDataset(Dataset):
     def __init__(self, X):
         self.X = X
@@ -48,26 +45,43 @@ class Model(nn.Module):
 
 model = Model()
 
-def field_mask(image):
+def field_mask(image, model_path, pad=0):
+    '''
+        Applies CNN model to mask images of soccer fields to only include
+        the playing field.
+
+        moodel_path is path to pretrained CNN model.
+
+        pad is a buffer zone applied to mask to allow for more confidence. 
+        pad works by zooming mask image then expanding to original image size.
+    '''
     with torch.no_grad():
+        #Shring image to model input size
         image_shrunk = cv2.resize(image, (128, 72), interpolation=cv2.INTER_AREA)
         image_shrunk = np.expand_dims(image_shrunk, 0)
+        #Convert image to pytoch DataLoader
         image_ds = imageDataset(X=image_shrunk)
         image_dl = DataLoader(image_ds, 1)
+        #Load Model
         model.load_state_dict(torch.load(model_path))
+        #Generate mask
         for input in image_dl:
             mask = model(input[0])
         mask = mask.reshape(36, 64)
         mask_detach = mask.numpy()
+        #Add desired padding to mask and expand to original size
+        if pad != 0:
+            mask_detach = mask_detach[pad:-pad, pad:-pad]
         x = np.linspace(0, 1, mask_detach.shape[0])
         y = np.linspace(0, 1, mask_detach.shape[1])
         f = interpolate.interp2d(y, x, mask_detach, kind='linear')
-
         x2 = np.linspace(0, 1, 720)
         y2 = np.linspace(0, 1, 1280)
         mask_expand = f(y2, x2)
+        #Make binary mask
         mask_expand[mask_expand>.5] = 1
         mask_expand[mask_expand<=.5] = 0
+        #Apply mask to image
         masked_image = np.zeros((720, 1280, 3))
         for i in range(3):
             masked_image[:, :, i] = mask_expand * image[:, :, i]
