@@ -51,7 +51,6 @@ model = Model()
 def field_mask(image):
     with torch.no_grad():
         image_shrunk = cv2.resize(image, (128, 72), interpolation=cv2.INTER_AREA)
-        print(image_shrunk.shape)
         image_shrunk = np.expand_dims(image_shrunk, 0)
         image_ds = imageDataset(X=image_shrunk)
         image_dl = DataLoader(image_ds, 1)
@@ -69,12 +68,9 @@ def field_mask(image):
         mask_expand = f(y2, x2)
         mask_expand[mask_expand>.5] = 1
         mask_expand[mask_expand<=.5] = 0
-        print(mask_expand)
         masked_image = np.zeros((720, 1280, 3))
         for i in range(3):
-            print(mask_expand.shape, image[:, :, i].shape)
             masked_image[:, :, i] = mask_expand * image[:, :, i]
-            print(masked_image[:,:,i])
 
         return masked_image
 
@@ -84,7 +80,6 @@ images = list(glob.glob(image_path + '*.jpg'))
 test_image_path = images[15]
 test_image = cv2.cvtColor(cv2.imread(test_image_path), cv2.COLOR_BGR2RGB)
 masked_image = field_mask(test_image)
-print(masked_image)
 plt.imshow(masked_image[:,:,:].astype('int'))
 plt.colorbar()
 plt.show()
