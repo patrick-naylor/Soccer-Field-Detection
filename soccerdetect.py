@@ -8,6 +8,7 @@ import numpy as np
 from scipy import interpolate
 
 
+
 class imageDataset(Dataset):
     def __init__(self, X):
         self.X = X
@@ -87,3 +88,4 @@ def field_mask(image, model_path, pad=0):
             masked_image[:, :, i] = mask_expand * image[:, :, i]
 
         return masked_image
+
