@@ -66,7 +66,7 @@ def field_mask(image, model_path, pad=0):
         model.load_state_dict(torch.load(model_path))
         #Generate mask
         for input in image_dl:
-            mask = model(input[0])
+            mask = F.sigmoid(model(input[0]))
         mask = mask.reshape(36, 64)
         mask_detach = mask.numpy()
         #Add desired padding to mask and expand to original size
