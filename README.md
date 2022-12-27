@@ -1,4 +1,4 @@
-# Field Detection
+# Soccer Field Detection
 
 As a preprocessing step for player and ball tracking models being able to isolate the playing surface is essential.
 In order to to this I trained a convolutional neural network on images from the Islamic Azad University Football Dataset. The model is trained on football/soccer images but could easily be adapted to other rectangular field sports. The training data was created by taking images from the database and drawing the bounds of the playing surface using the python script `image_app.py`. The model is trained using `model.ipynb`.
